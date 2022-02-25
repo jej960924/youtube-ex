@@ -1,10 +1,22 @@
 import './App.css';
 import { useState, useEffect } from 'react';
 import VideoList from './components/videolist/VideoList';
-
+import Searchbar from './components/searchbar/Searchbar';
 
 function App() {
+  const API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY;
   const [videoItems, setVideoItems] = useState([]);
+  const search =(searchValuTxt) => {
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+    
+    fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=30&q=${searchValuTxt}&key=${API_KEY}`, requestOptions)
+      .then(response => response.json())
+      .then(result => setVideoItems(result.items)) // items 받아와서 setVideoItems 전달
+      .catch(error => console.log('error', error));
+  } //서치 함수 끝
   
   // ,[] 한 번만 콜
   useEffect(()=>{    
@@ -13,7 +25,7 @@ function App() {
         redirect: 'follow'
       };
       
-      fetch("https://youtube.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=30&key=AIzaSyBjp0tpPVbVRQyTe23E0pfEYkkQLTWAdw0", requestOptions)
+      fetch(`https://youtube.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=30&regionCode=KR&key=${API_KEY}`, requestOptions)
         .then(response => response.json())
         // .then(result => console.log(result.items))
         .then(result => setVideoItems(result.items)) // items를 받아와 setVideoItems 전달
@@ -22,6 +34,7 @@ function App() {
 
   return (
     <div className="App">
+      <Searchbar searchResult={search} /> {/* props로 받아옴 */}
       <VideoList videoItems={videoItems} />
     </div>
   );

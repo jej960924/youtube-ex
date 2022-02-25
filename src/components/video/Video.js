@@ -1,10 +1,20 @@
 import React from 'react';
+import './video.css';
 
 function Video(props){
     return(
-        <div>
-            {props.videoItem.snippet.channelTitle}
-        </div>
+        <li className="videoContainer">
+            <div className="video">
+
+                <img className="thumimg" src={props.videoItem.snippet.thumbnails.medium.url} alt="video thumnail" alt="thumnail img" />
+
+                <div className="titledate">
+                    <p className="title">{props.videoItem.snippet.title}</p>
+                    <p className="channelTitle">{props.videoItem.snippet.channelTitle}</p>
+                </div>
+
+            </div>
+        </li>
     )
 }
 
